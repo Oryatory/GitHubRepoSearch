@@ -2,14 +2,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { setQuery, setRepos } from "../features/search/searchSlice";
 import { AppDispatch, RootState } from "../store";
 import { getRepos } from "../features/search/searchSlice";
-import { useEffect } from "react";
 
 const SearchInput = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { query } = useSelector((store: RootState) => store.search);
-  useEffect(() => {
-    query === "" && dispatch(setRepos([]));
-  }, [query]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setQuery(event.target.value));
   };

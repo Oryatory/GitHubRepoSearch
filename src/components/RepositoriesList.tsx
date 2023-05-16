@@ -1,9 +1,9 @@
 import SingleRepository from "./SingleRepository";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store";
-import { getRepos } from "../features/search/searchSlice";
+import { getRepos, setRepos } from "../features/search/searchSlice";
 import { SingleRepositoryProps } from "./SingleRepository";
-
+import { useEffect } from "react";
 const RepositoriesList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const {
@@ -14,7 +14,9 @@ const RepositoriesList = () => {
     isLoading,
     requestError,
   } = useSelector((store: RootState) => store.search);
-
+  useEffect(() => {
+    query === "" && dispatch(setRepos([]));
+  }, [query]);
   if (requestError) {
     return <h2>{requestError}</h2>;
   }
