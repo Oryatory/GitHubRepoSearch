@@ -130,6 +130,8 @@ const searchSlice = createSlice({
         state.repositories = action.payload.repositories;
         state.totalPages = action.payload.totalPages;
         state.currentPage = action.payload.currentPage;
+        if (action.payload.repositories.length === 0)
+          state.requestError = "No repositories found. Enter valid query.";
         saveToLocalStorage(action.payload);
       })
       .addCase(getRepos.rejected, (state, action) => {

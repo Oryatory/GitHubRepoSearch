@@ -14,9 +14,7 @@ const RepositoriesList = () => {
     isLoading,
     requestError,
   } = useSelector((store: RootState) => store.search);
-  if (!repositories && query.length > 0) {
-    return <h2>No repositories found. Enter valid query.</h2>;
-  }
+
   if (requestError) {
     return <h2>{requestError}</h2>;
   }
