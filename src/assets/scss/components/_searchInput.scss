@@ -1,0 +1,28 @@
+.search {
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 4rem clamp(1rem, 5vw, 4rem);
+  }
+  &__form {
+    display: flex;
+    align-items: center;
+  }
+  &__input {
+    margin-right: 1rem;
+    height: 100%;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    width: 100%;
+  }
+
+  &__btn {
+    background-color: cornflowerblue;
+    border: none;
+    border-radius: 3px;
+    font-size: 1.5rem;
+    padding: 0.5rem 2rem;
+    color: #ffffff;
+    cursor: pointer;
+  }
+}

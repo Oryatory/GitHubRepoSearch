@@ -1,0 +1,53 @@
+@use "buttons" as btn;
+.single-repo {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  max-width: 12rem;
+  width: 100%;
+  border: none;
+  border-radius: 0.3rem;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  overflow: hidden;
+  padding: 1rem;
+
+  &__heading {
+    text-transform: capitalize;
+    word-wrap: break-word;
+    margin: 0.5rem 0;
+  }
+
+  &__desc {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  &__wrapper {
+    width: 100%;
+    img {
+      border-radius: 0.3rem;
+      width: 100%;
+    }
+  }
+  &__git-btn {
+    @include btn.git-hub-btn;
+    // &--repo-page {
+    //   position: absolute;
+    //   bottom: 0;
+    //   width: 100%;
+    // }
+  }
+}
+
+.repo {
+  &__container {
+    display: flex;
+    justify-content: space-around;
+    row-gap: 2rem;
+    column-gap: 1rem;
+    flex-wrap: wrap;
+    margin: 2rem clamp(1rem, 7vw, 5rem);
+  }
+}
