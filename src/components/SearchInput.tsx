@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { setQuery, getUserRepos } from "../features/search/searchSlice";
+import { setQuery, setRepos } from "../features/search/searchSlice";
 import { AppDispatch, RootState } from "../store";
 import { getRepos } from "../features/search/searchSlice";
 import { useEffect } from "react";
@@ -8,7 +8,7 @@ const SearchInput = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { query } = useSelector((store: RootState) => store.search);
   useEffect(() => {
-    query === "" && dispatch(getUserRepos());
+    query === "" && dispatch(setRepos([]));
   }, [query]);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setQuery(event.target.value));
@@ -18,7 +18,7 @@ const SearchInput = () => {
     event.preventDefault();
     query !== ""
       ? dispatch(getRepos({ query, page: 1 }))
-      : dispatch(getUserRepos());
+      : dispatch(setRepos([]));
   };
 
   return (

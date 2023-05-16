@@ -8,11 +8,12 @@ interface SearchState {
   isLoading: boolean;
   currentPage: number;
   totalPages: number;
+  requestError: string;
 }
 
 const url = "https://api.github.com/search/repositories?q=";
-const accessToken =
-  "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";
+// const accessToken =
+//   "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";
 
 const getLocalStorageData = (): SearchState => {
   const repositoriesString: string | null =
@@ -22,16 +23,18 @@ const getLocalStorageData = (): SearchState => {
     : [];
 
   const query: string = localStorage.getItem("query") || "";
-  const isLoading = true;
+  const isLoading = false;
   const totalPagesString = localStorage.getItem("totalPages");
   const totalPages = totalPagesString ? JSON.parse(totalPagesString) : 1;
   const currentPage = JSON.parse(localStorage.getItem("currentPage") as string);
+  const requestError = "";
   return {
     repositories,
     query,
     isLoading,
     currentPage,
     totalPages,
+    requestError,
   };
 };
 type saveToLocalStorageType = {
@@ -70,26 +73,28 @@ export const getRepos = createAsyncThunk(
         currentPage: page,
       };
     } catch (error) {
-      return thunkAPI.rejectWithValue("something went wrong");
+      return thunkAPI.rejectWithValue(
+        "Number of requests exceeded, please try again later."
+      );
     }
   }
 );
 
-export const getUserRepos = createAsyncThunk(
-  "search/getUserRepos",
-  async (_, thunkAPI) => {
-    try {
-      const response = await axios.get("https://api.github.com/user/repos", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue("something went wrong");
-    }
-  }
-);
+// export const getUserRepos = createAsyncThunk(
+//   "search/getUserRepos",
+//   async (_, thunkAPI) => {
+//     try {
+//       const response = await axios.get("https://api.github.com/user/repos", {
+//         headers: {
+//           Authorization: `Bearer ${accessToken}`,
+//         },
+//       });
+//       return response.data;
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue("something went wrong");
+//     }
+//   }
+// );
 
 const searchSlice = createSlice({
   name: "search",
@@ -116,9 +121,11 @@ const searchSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getRepos.pending, (state) => {
+        state.requestError = "";
         state.isLoading = true;
       })
       .addCase(getRepos.fulfilled, (state, action) => {
+        state.requestError = "";
         state.isLoading = false;
         state.repositories = action.payload.repositories;
         state.totalPages = action.payload.totalPages;
@@ -128,20 +135,22 @@ const searchSlice = createSlice({
       .addCase(getRepos.rejected, (state, action) => {
         console.log(action);
         state.isLoading = false;
-      })
-      .addCase(getUserRepos.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getUserRepos.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.repositories = action.payload;
-        state.totalPages = 1;
-        localStorage.setItem("repositories", JSON.stringify(action.payload));
-      })
-      .addCase(getUserRepos.rejected, (state, action) => {
-        console.log(action);
-        state.isLoading = false;
+        state.requestError =
+          "Number of requests exceeded, please try again later.";
       });
+    // .addCase(getUserRepos.pending, (state) => {
+    //   state.isLoading = true;
+    // })
+    // .addCase(getUserRepos.fulfilled, (state, action) => {
+    //   state.isLoading = false;
+    //   state.repositories = action.payload;
+    //   state.totalPages = 1;
+    //   localStorage.setItem("repositories", JSON.stringify(action.payload));
+    // })
+    // .addCase(getUserRepos.rejected, (state, action) => {
+    //   console.log(action);
+    //   state.isLoading = false;
+    // });
   },
 });
 
