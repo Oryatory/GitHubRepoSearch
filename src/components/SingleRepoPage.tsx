@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -7,6 +7,7 @@ import { SingleRepositoryProps } from "./SingleRepository";
 import { FiStar } from "react-icons/fi";
 import { formatDate } from "../utils/formatDate";
 import { BsGithub } from "react-icons/bs";
+import { motion } from "framer-motion";
 import axios from "axios";
 
 const getLangs = async (url: string) => {
@@ -35,7 +36,7 @@ const SingleRepoPage = () => {
     owner: { avatar_url, login, html_url },
   } = repo as SingleRepositoryProps;
 
-  const [languages, setLanguages] = useState<string[]>([]);
+  const [languages, setLanguages] = useState({});
 
   useEffect(() => {
     getLangs(languages_url as string).then((data) => {
@@ -43,10 +44,18 @@ const SingleRepoPage = () => {
     });
   }, [languages_url]);
 
+  const memoizedFromatDate = useCallback(() => {
+    return formatDate(pushed_at);
+  }, [repositories]);
+
   if (!languages) return <h2>Loading</h2>;
 
   return (
-    <div className="repo__container">
+    <motion.div
+      className="repo__container"
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+    >
       <div className="repo-page">
         <Link to="/">
           <button className="repo-page__btn">Back To List</button>
@@ -68,7 +77,7 @@ const SingleRepoPage = () => {
               <FiStar /> {stargazers_count}
             </span>
             <p className="repo-page__commit">
-              <b>Latest commit:</b> <br /> {formatDate(pushed_at)}
+              <b>Latest commit:</b> <br /> {memoizedFromatDate()}
             </p>
           </div>
           <div className="repo-page__right">
@@ -78,15 +87,15 @@ const SingleRepoPage = () => {
                 ? description
                 : "User did not provided any description"}
             </p>
-            {languages.length !== 0 && (
-              <>
+            {Object.entries(languages).length > 0 && (
+              <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }}>
                 <h4>Languages used:</h4>
                 <ul className="repo-page__langs">
                   {Object.keys(languages).map((key) => (
                     <li key={key}>{key}</li>
                   ))}
                 </ul>
-              </>
+              </motion.div>
             )}
             <a className="repo-page__git-btn" href={html_url} target="_blank">
               <BsGithub /> View on github
@@ -94,7 +103,7 @@ const SingleRepoPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default SingleRepoPage;

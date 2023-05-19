@@ -12,8 +12,6 @@ interface SearchState {
 }
 
 const url = "https://api.github.com/search/repositories?q=";
-// const accessToken =
-//   "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";
 
 const getLocalStorageData = (): SearchState => {
   const repositoriesString: string | null =
@@ -24,8 +22,8 @@ const getLocalStorageData = (): SearchState => {
 
   const query: string = localStorage.getItem("query") || "";
   const isLoading = false;
-  const totalPagesString = localStorage.getItem("totalPages");
-  const totalPages = totalPagesString ? JSON.parse(totalPagesString) : 1;
+  const totalPages =
+    JSON.parse(localStorage.getItem("totalPages") as string) || 1;
   const currentPage = JSON.parse(localStorage.getItem("currentPage") as string);
   const requestError = "";
   return {
@@ -80,22 +78,6 @@ export const getRepos = createAsyncThunk(
   }
 );
 
-// export const getUserRepos = createAsyncThunk(
-//   "search/getUserRepos",
-//   async (_, thunkAPI) => {
-//     try {
-//       const response = await axios.get("https://api.github.com/user/repos", {
-//         headers: {
-//           Authorization: `Bearer ${accessToken}`,
-//         },
-//       });
-//       return response.data;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue("something went wrong");
-//     }
-//   }
-// );
-
 const searchSlice = createSlice({
   name: "search",
   initialState,
@@ -116,6 +98,9 @@ const searchSlice = createSlice({
     },
     setTotalPages(state, action) {
       state.totalPages = action.payload;
+    },
+    setCurrentPage(state, action) {
+      state.currentPage = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -140,22 +125,10 @@ const searchSlice = createSlice({
         state.requestError =
           "Number of requests exceeded, please try again later.";
       });
-    // .addCase(getUserRepos.pending, (state) => {
-    //   state.isLoading = true;
-    // })
-    // .addCase(getUserRepos.fulfilled, (state, action) => {
-    //   state.isLoading = false;
-    //   state.repositories = action.payload;
-    //   state.totalPages = 1;
-    //   localStorage.setItem("repositories", JSON.stringify(action.payload));
-    // })
-    // .addCase(getUserRepos.rejected, (state, action) => {
-    //   console.log(action);
-    //   state.isLoading = false;
-    // });
   },
 });
 
-export const { setQuery, setRepos, setIsLoading } = searchSlice.actions;
+export const { setQuery, setRepos, setIsLoading, setCurrentPage } =
+  searchSlice.actions;
 
 export default searchSlice.reducer;

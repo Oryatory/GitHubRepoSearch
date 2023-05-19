@@ -2,6 +2,8 @@ import { FiStar } from "react-icons/fi";
 import { BsGithub } from "react-icons/bs";
 import { formatDate } from "../utils/formatDate";
 import { Link } from "react-router-dom";
+import { useCallback } from "react";
+import { motion } from "framer-motion";
 
 export type SingleRepositoryProps = {
   name: string;
@@ -22,8 +24,16 @@ const SingleRepository = ({
   html_url,
   owner: { avatar_url: img },
 }: SingleRepositoryProps) => {
+  const memoizedFromatDate = useCallback(() => {
+    return formatDate(pushed_at);
+  }, [pushed_at]);
+
   return (
-    <div className="single-repo">
+    <motion.div
+      className="single-repo"
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+    >
       <div className="single-repo__wrapper">
         <img src={img} alt={img} />
       </div>
@@ -34,12 +44,12 @@ const SingleRepository = ({
         <FiStar /> {stargazers_count}
       </span>
       <p className="single-repo__desc">
-        <b>Latest commit:</b> <br /> {formatDate(pushed_at)}
+        <b>Latest commit:</b> <br /> {memoizedFromatDate()}
       </p>
       <a className="single-repo__git-btn" href={html_url} target="_blank">
         <BsGithub /> View on github
       </a>
-    </div>
+    </motion.div>
   );
 };
 export default SingleRepository;
