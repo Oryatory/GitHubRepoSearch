@@ -5,16 +5,24 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 
+const scrollbarWidth = window.innerWidth - document.body.offsetWidth;
+
 const App = () => {
-  const { isLoading, requestError, query } = useSelector(
+  const { isLoading, requestError, query, repositories } = useSelector(
     (store: RootState) => store.search
   );
-  const scrollbarWidth = window.innerWidth - document.body.offsetWidth;
+
   useEffect(() => {
     const bodyStyles = document.body.style;
+    console.log(
+      isLoading || query === "" || requestError || repositories.length === 0
+    );
+
     bodyStyles.paddingRight =
-      isLoading || query === "" || requestError ? `${scrollbarWidth}px` : "0px";
-  }, [isLoading, query, requestError]);
+      isLoading || query === "" || requestError || repositories.length === 0
+        ? `${scrollbarWidth}px`
+        : "0px";
+  }, [isLoading, query, requestError, repositories]);
 
   return (
     <Router>

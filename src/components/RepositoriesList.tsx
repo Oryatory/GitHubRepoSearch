@@ -47,7 +47,7 @@ const RepositoriesList = () => {
                   currentPage === index + 1 ? "#6495ed" : "#ffffff",
                 color: currentPage === index + 1 ? "#ffffff" : "#000000",
               }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.5 }}
             >
               {index + 1}
             </motion.button>
@@ -59,7 +59,7 @@ const RepositoriesList = () => {
           <Loading />
         ) : (
           repositories.map((repo: SingleRepositoryProps) => {
-            return <SingleRepository key={repo.id} {...repo} />;
+            return <SingleRepository {...repo} key={repo.id} />;
           })
         )}
       </div>

@@ -33,6 +33,7 @@ const SingleRepository = ({
       className="single-repo"
       animate={{ opacity: 1 }}
       initial={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
     >
       <div className="single-repo__wrapper">
         <img src={img} alt={img} />
