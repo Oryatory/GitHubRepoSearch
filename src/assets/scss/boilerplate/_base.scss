@@ -7,7 +7,7 @@
 }
 
 body {
-  font-family: "Wix Madefor Display", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 main {
@@ -31,7 +31,7 @@ input {
 }
 
 .title {
-  font-size: 6rem;
+  font-size: clamp(2rem, 6vw, 6rem);
   font-weight: 400;
   margin-top: 0.5rem;
   color: #6495ed;

@@ -13,6 +13,7 @@
     display: flex;
     justify-content: space-between;
     gap: 2rem;
+    flex-wrap: wrap;
     max-width: 50vw;
   }
   &__left {
